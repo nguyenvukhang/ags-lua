@@ -20,6 +20,12 @@ local split = function (inputstr, sep)
   return t
 end
 
+local make_dict = function(t)
+  local r = {}
+  for _, v in pairs(t) do r[v] = true end
+  return r
+end
+
 --[[
 keep a scanlist in a text file
 scan for new repos
@@ -27,11 +33,33 @@ scan for new repos
 
 local env = {}
 env.home = os.getenv("HOME")
-print(env.home)
+
 local git_locations = split(os.capture("fd .git$ $HOME -t d -t f -H -d 4"))
 
 local f = io.open("locations", 'w+')
+
 io.output(f)
+
+local scanlist = make_dict({
+  '~/dots',
+  '~/dots/nvim/.config/nvim',
+  '~/dots/pass/.password-store',
+  '~/dots/personal',
+  '~/dots/walls',
+  '~/dots/zsh',
+  '~/repos/blog',
+  '~/repos/hcanoe-firebase/repo',
+  '~/repos/min',
+  '~/repos/notes',
+  '~/repos/uni/nightly',
+  '~/sunnus/app/dev',
+  '~/sunnus/web/dev',
+})
+
 for _, v in pairs(git_locations) do
-  io.write(v:gsub(env.home, '~')..'\n')
+  local short = v:gsub(env.home, '~'):gsub('/.git$', '')
+  if scanlist[short] then
+    print(short)
+  end
+  io.write(short..'\n')
 end
