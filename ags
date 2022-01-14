@@ -1,5 +1,7 @@
 #!/usr/bin/env lua
 
+local u = require('utils')
+
 function os.capture(cmd, raw)
   local f = assert(io.popen(cmd, 'r'))
   local s = assert(f:read('*a'))
@@ -44,22 +46,51 @@ local scanlist = make_dict({
   '~/dots',
   '~/dots/nvim/.config/nvim',
   '~/dots/pass/.password-store',
+  '~/sunnus/test/dev',
   '~/dots/personal',
   '~/dots/walls',
   '~/dots/zsh',
   '~/repos/blog',
   '~/repos/hcanoe-firebase/repo',
   '~/repos/min',
+  '~/sunnus/wasdfeb/dev',
   '~/repos/notes',
   '~/repos/uni/nightly',
   '~/sunnus/app/dev',
   '~/sunnus/web/dev',
 })
 
-for _, v in pairs(git_locations) do
-  local short = v:gsub(env.home, '~'):gsub('/.git$', '')
-  if scanlist[short] then
-    print(short)
+-- for _, v in pairs(git_locations) do
+--   local short = v:gsub(env.home, '~'):gsub('/.git$', '')
+--   if scanlist[short] then
+--     print(short)
+--   else
+--     print(short.." doesn't exist.")
+--   end
+--   io.write(short..'\n')
+-- end
+
+-- TODO: tell user which entry in scanlist doesn't exist
+local git_repos = {}
+local not_repos = {}
+for k, _ in pairs(scanlist) do
+  local d = k:gsub('^~', env.home) .. '/.git'
+  if u.exists(d) then
+    table.insert(git_repos, d)
+  else
+    table.insert(not_repos, d)
   end
-  io.write(short..'\n')
+end
+
+table.sort(git_repos)
+table.sort(not_repos)
+
+for _, v in pairs(git_repos) do
+  print(v)
+end
+
+print('-------------------')
+
+for _, v in pairs(not_repos) do
+  print(v.." doesn't exist")
 end
