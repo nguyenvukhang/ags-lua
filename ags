@@ -1,0 +1,37 @@
+#!/usr/bin/env lua
+
+function os.capture(cmd, raw)
+  local f = assert(io.popen(cmd, 'r'))
+  local s = assert(f:read('*a'))
+  f:close()
+  if raw then return s end
+  s = string.gsub(s, '^%s+', '')
+  s = string.gsub(s, '%s+$', '')
+  s = string.gsub(s, '[\n\r]+', ' ')
+  return s
+end
+
+local split = function (inputstr, sep)
+  if sep == nil then sep = "%s" end
+  local t = {}
+  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  return t
+end
+
+--[[
+keep a scanlist in a text file
+scan for new repos
+]]
+
+local env = {}
+env.home = os.getenv("HOME")
+print(env.home)
+local git_locations = split(os.capture("fd .git$ $HOME -t d -t f -H -d 4"))
+
+local f = io.open("locations", 'w+')
+io.output(f)
+for _, v in pairs(git_locations) do
+  io.write(v:gsub(env.home, '~')..'\n')
+end
