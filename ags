@@ -1,16 +1,25 @@
 #!/usr/bin/env lua
 
-local parse_arguments = function (arg)
-  print(arg[1])
-end
-
 require('extensions')
 local u = require('utils')
 local Repo = require('repo')
 local c = require('colors')
-
 local env = {}
 env.home = os.getenv("HOME")
+
+local parse_commands = function (arg)
+  local a = u.make_dict(arg)
+  local commands = {
+    list   = a["list"]   or a["ls"],
+    rescan = a["rescan"] or a["re"]
+  }
+  print('commands:')
+  for k, v in pairs(commands) do
+    print(k, v)
+  end
+  return commands
+end
+
 
 local scanlist = {
   '~/dots',
@@ -51,5 +60,5 @@ local main = function ()
   print()
 end
 
--- parse_arguments(arg)
-main()
+parse_commands(arg)
+-- main()
