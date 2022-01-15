@@ -12,17 +12,17 @@ local c = require('colors')
 local env = {}
 env.home = os.getenv("HOME")
 
-local scanlist = u.make_dict({
+local scanlist = {
   '~/dots',
   '~/dots/personal',
   '~/dots/zsh',
   '~/repos/ags',
   '~/repos/books'
-})
+}
 
 local git_repos = {}
 local not_repos = {}
-for k, _ in pairs(scanlist) do
+for _, k in pairs(scanlist) do
   local dir = k:gsub('^~', env.home)
   local g = dir .. '/.git'
   if u.exists(g) then
@@ -40,8 +40,9 @@ for _, dir in pairs(git_repos) do
   end
 end
 
+
 local main = function ()
-  for _, r in ipairs(repos) do
+  for _, r in pairs(repos) do
     local name = c.green(r.name)
     print('\n'..c.gray('[')..name..c.gray('/'..r.branch..']'))
     table.print(r.commits)
