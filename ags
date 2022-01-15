@@ -74,8 +74,9 @@ local scanlist = make_dict({
 local git_repos = {}
 local not_repos = {}
 for k, _ in pairs(scanlist) do
-  local d = k:gsub('^~', env.home) .. '/.git'
-  if u.exists(d) then
+  local d = k:gsub('^~', env.home)
+  local g = d .. '/.git'
+  if u.exists(g) then
     table.insert(git_repos, d)
   else
     table.insert(not_repos, d)
@@ -93,4 +94,14 @@ print('-------------------')
 
 for _, v in pairs(not_repos) do
   print(v.." doesn't exist")
+end
+
+print('-------------------')
+
+for _, v in pairs(git_repos) do
+  local git_status = os.capture("git -C "..v.." status -s", true)
+  print(git_status)
+  -- for _, s in pairs(git_status) do
+  --   print(s)
+  -- end
 end
