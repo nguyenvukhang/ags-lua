@@ -7,6 +7,8 @@ function Repo.new (dir)   -- 2nd version
   setmetatable(repo, Repo.mt)
   repo.branch = git.branch(dir)
   repo.remote = git.remote(dir)
+  repo.commits = git.commits(dir)
+  repo.status = git.status(dir)
   repo.dir = dir
   return repo
 end

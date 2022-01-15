@@ -45,17 +45,6 @@ local scanlist = make_dict({
   -- '~/dots/zsh',
 })
 
--- for _, v in pairs(git_locations) do
---   local short = v:gsub(env.home, '~'):gsub('/.git$', '')
---   if scanlist[short] then
---     print(short)
---   else
---     print(short.." doesn't exist.")
---   end
---   io.write(short..'\n')
--- end
-
--- TODO: tell user which entry in scanlist doesn't exist
 local git_repos = {}
 local not_repos = {}
 for k, _ in pairs(scanlist) do
@@ -71,32 +60,6 @@ end
 table.sort(git_repos)
 table.sort(not_repos)
 
--- for _, v in pairs(git_repos) do print(v) end
-
--- delim()
-
--- for _, v in pairs(not_repos) do print(v.." doesn't exist") end
-
--- delim()
-
--- for _, dir in pairs(git_repos) do
---   print('\n[ '..dir..' ]')
---   local git_status = git.status(dir)
---   if git_status then
---     for _, v in pairs(git_status) do
---       print(v)
---     end
---   end
---
---   local git_commits = git.commits(dir)
---   if git_commits then
---     for _, v in pairs(git_commits) do
---       print(v)
---     end
---   end
--- end
-
-
 local repos = {}
 -- repos.meme = Repo.new('whereis')
 -- Repo.print(repos.meme)
@@ -105,7 +68,18 @@ for _, dir in pairs(git_repos) do
   repos[dir] = Repo.new(dir)
 end
 
+table.print = function(t)
+  if t then
+    for _, v in pairs(t) do
+      print(v)
+    end
+  end
+end
+
 -- checks
 for _, dir in pairs(git_repos) do
-  Repo.print(repos[dir])
+  local r = repos[dir]
+  print('\n'..r.remote..' @ '..r.branch)
+  table.print(r.commits)
+  table.print(r.status)
 end
