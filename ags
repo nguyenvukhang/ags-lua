@@ -2,6 +2,7 @@
 
 local u = require('utils')
 local Repo = require('repo')
+local c = require('colors')
 
 local delim = function ()
   print('==========================')
@@ -43,6 +44,7 @@ local scanlist = make_dict({
   -- '~/dots/nvim/.config/nvim',
   '~/dots/personal',
   -- '~/dots/zsh',
+  '~/repos/ags'
 })
 
 local git_repos = {}
@@ -79,7 +81,10 @@ end
 -- checks
 for _, dir in pairs(git_repos) do
   local r = repos[dir]
-  print('\n'..r.remote..' @ '..r.branch)
+  local remote = c.green(r.remote)
+  local branch = c.gray(r.branch)
+  print('\n'..remote..c.gray(' [')..branch..c.gray(']'))
   table.print(r.commits)
   table.print(r.status)
 end
+
