@@ -1,6 +1,11 @@
 #!/usr/bin/env lua
 
 local u = require('utils')
+local git = require('git')
+
+local delim = function ()
+  print('==========================') 
+end
 
 function os.capture(cmd, raw)
   local f = assert(io.popen(cmd, 'r'))
@@ -11,15 +16,6 @@ function os.capture(cmd, raw)
   s = string.gsub(s, '%s+$', '')
   s = string.gsub(s, '[\n\r]+', ' ')
   return s
-end
-
-local split = function (inputstr, sep)
-  if sep == nil then sep = "%s" end
-  local t = {}
-  for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-    table.insert(t, str)
-  end
-  return t
 end
 
 local make_dict = function(t)
@@ -36,7 +32,7 @@ scan for new repos
 local env = {}
 env.home = os.getenv("HOME")
 
-local git_locations = split(os.capture("fd .git$ $HOME -t d -t f -H -d 4"))
+local git_locations = u.split(os.capture("fd .git$ $HOME -t d -t f -H -d 4"))
 
 local f = io.open("locations", 'w+')
 
@@ -45,19 +41,8 @@ io.output(f)
 local scanlist = make_dict({
   '~/dots',
   '~/dots/nvim/.config/nvim',
-  '~/dots/pass/.password-store',
-  '~/sunnus/test/dev',
   '~/dots/personal',
-  '~/dots/walls',
   '~/dots/zsh',
-  '~/repos/blog',
-  '~/repos/hcanoe-firebase/repo',
-  '~/repos/min',
-  '~/sunnus/wasdfeb/dev',
-  '~/repos/notes',
-  '~/repos/uni/nightly',
-  '~/sunnus/app/dev',
-  '~/sunnus/web/dev',
 })
 
 -- for _, v in pairs(git_locations) do
@@ -74,34 +59,39 @@ local scanlist = make_dict({
 local git_repos = {}
 local not_repos = {}
 for k, _ in pairs(scanlist) do
-  local d = k:gsub('^~', env.home)
-  local g = d .. '/.git'
+  local dir = k:gsub('^~', env.home)
+  local g = dir .. '/.git'
   if u.exists(g) then
-    table.insert(git_repos, d)
+    table.insert(git_repos, dir)
   else
-    table.insert(not_repos, d)
+    table.insert(not_repos, dir)
   end
 end
 
 table.sort(git_repos)
 table.sort(not_repos)
 
-for _, v in pairs(git_repos) do
-  print(v)
-end
+-- for _, v in pairs(git_repos) do print(v) end
 
-print('-------------------')
+-- delim()
 
-for _, v in pairs(not_repos) do
-  print(v.." doesn't exist")
-end
+-- for _, v in pairs(not_repos) do print(v.." doesn't exist") end
 
-print('-------------------')
+-- delim()
 
-for _, v in pairs(git_repos) do
-  local git_status = os.capture("git -C "..v.." status -s", true)
-  print(git_status)
-  -- for _, s in pairs(git_status) do
-  --   print(s)
-  -- end
+for _, dir in pairs(git_repos) do
+  print('\n[ '..dir..' ]')
+  local git_status = git.status(dir)
+  if git_status then
+    for _, v in pairs(git_status) do
+      print(v)
+    end
+  end
+
+  local git_commits = git.commits(dir)
+  if git_commits then
+    for _, v in pairs(git_commits) do
+      print(v)
+    end
+  end
 end
