@@ -2,6 +2,7 @@
 
 local u = require('utils')
 local git = require('git')
+local Repo = require('repo')
 
 local delim = function ()
   print('==========================') 
@@ -40,9 +41,9 @@ io.output(f)
 
 local scanlist = make_dict({
   '~/dots',
-  '~/dots/nvim/.config/nvim',
+  -- '~/dots/nvim/.config/nvim',
   '~/dots/personal',
-  '~/dots/zsh',
+  -- '~/dots/zsh',
 })
 
 -- for _, v in pairs(git_locations) do
@@ -79,19 +80,33 @@ table.sort(not_repos)
 
 -- delim()
 
-for _, dir in pairs(git_repos) do
-  print('\n[ '..dir..' ]')
-  local git_status = git.status(dir)
-  if git_status then
-    for _, v in pairs(git_status) do
-      print(v)
-    end
-  end
+-- for _, dir in pairs(git_repos) do
+--   print('\n[ '..dir..' ]')
+--   local git_status = git.status(dir)
+--   if git_status then
+--     for _, v in pairs(git_status) do
+--       print(v)
+--     end
+--   end
+-- 
+--   local git_commits = git.commits(dir)
+--   if git_commits then
+--     for _, v in pairs(git_commits) do
+--       print(v)
+--     end
+--   end
+-- end
 
-  local git_commits = git.commits(dir)
-  if git_commits then
-    for _, v in pairs(git_commits) do
-      print(v)
-    end
-  end
+
+local repos = {}
+-- repos.meme = Repo.new('whereis')
+-- Repo.print(repos.meme)
+
+for _, dir in pairs(git_repos) do
+  repos[dir] = Repo.new(dir)
+end
+
+-- checks
+for _, dir in pairs(git_repos) do
+  Repo.print(repos[dir])
 end
