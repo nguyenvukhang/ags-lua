@@ -2,7 +2,7 @@ local utils = {}
 
 -- checks if a file exists
 utils.exists = function (file)
-  local ok, err, code = os.rename(file, file)
+  local ok, _, code = os.rename(file, file)
   if not ok then
     if code == 13 then
       -- Permission denied, but it exists
@@ -22,5 +22,10 @@ utils.split = function (inputstr, sep)
   return t
 end
 
+utils.make_dict = function(t)
+  local r = {}
+  for _, v in pairs(t) do r[v] = true end
+  return r
+end
 
 return utils

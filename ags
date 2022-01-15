@@ -1,49 +1,16 @@
 #!/usr/bin/env lua
 
+require('extensions')
 local u = require('utils')
 local Repo = require('repo')
 local c = require('colors')
 
-local delim = function ()
-  print('==========================')
-end
-
-function os.capture(cmd, raw)
-  local f = assert(io.popen(cmd, 'r'))
-  local s = assert(f:read('*a'))
-  f:close()
-  if raw then return s end
-  s = string.gsub(s, '^%s+', '')
-  s = string.gsub(s, '%s+$', '')
-  s = string.gsub(s, '[\n\r]+', ' ')
-  return s
-end
-
-local make_dict = function(t)
-  local r = {}
-  for _, v in pairs(t) do r[v] = true end
-  return r
-end
-
---[[
-keep a scanlist in a text file
-scan for new repos
-]]
-
 local env = {}
 env.home = os.getenv("HOME")
 
-local git_locations = u.split(os.capture("fd .git$ $HOME -t d -t f -H -d 4"))
-
-local f = io.open("locations", 'w+')
-
-io.output(f)
-
-local scanlist = make_dict({
+local scanlist = u.make_dict({
   '~/dots',
-  -- '~/dots/nvim/.config/nvim',
   '~/dots/personal',
-  -- '~/dots/zsh',
   '~/repos/ags'
 })
 
@@ -59,32 +26,21 @@ for k, _ in pairs(scanlist) do
   end
 end
 
-table.sort(git_repos)
-table.sort(not_repos)
-
 local repos = {}
--- repos.meme = Repo.new('whereis')
--- Repo.print(repos.meme)
-
 for _, dir in pairs(git_repos) do
   repos[dir] = Repo.new(dir)
 end
 
-table.print = function(t)
-  if t then
-    for _, v in pairs(t) do
-      print(v)
-    end
+local main = function ()
+  for _, dir in pairs(git_repos) do
+    local r = repos[dir]
+    local remote = c.green(r.remote)
+    local branch = c.gray(r.branch)
+    print('\n'..remote..c.gray(' [')..branch..c.gray(']'))
+    table.print(r.commits)
+    table.print(r.status)
   end
+  print()
 end
 
--- checks
-for _, dir in pairs(git_repos) do
-  local r = repos[dir]
-  local remote = c.green(r.remote)
-  local branch = c.gray(r.branch)
-  print('\n'..remote..c.gray(' [')..branch..c.gray(']'))
-  table.print(r.commits)
-  table.print(r.status)
-end
-
+main()
