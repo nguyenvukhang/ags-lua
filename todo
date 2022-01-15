@@ -1,6 +1,9 @@
 parse arguments
 
 functionalities
+read scanlist from a file
+read ignore list from a file
+(all from ~/.config/ags)
 [flag] scan for new repos
 
 flair
