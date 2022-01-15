@@ -25,7 +25,7 @@ git.status = function (dir)
   return cmd_get_table("git -C "..dir.." status -s")
 end
 
-git.commits = function (dir)
+git.cherry = function (dir)
   local t =  cmd_get_table("git -C "..dir.." cherry -v --abbrev")
   if t == nil then return nil end
   local r = {}
@@ -47,7 +47,21 @@ git.remote = function (dir, upstream)
   -- lua regex: https://www.lua.org/pil/20.2.html
   r = r:gsub('^https://.*/(.*)/', '%1/')
   r = r:gsub('^git@.*:', '')
-  return r:gsub('%.git$', '')
+  r = r:gsub('%.git$', '')
+  local _, _, owner, repo_name = string.find(r, "^(.*)/(.*)$")
+  return owner, repo_name
+end
+
+git.summary = function (dir)
+  local owner, repo_name = git.remote(dir)
+  return {
+    owner = owner,
+    name = repo_name,
+    dir = dir,
+    status = git.status(dir),
+    commits = git.cherry(dir),
+    branch = git.branch(dir),
+  }
 end
 
 return git

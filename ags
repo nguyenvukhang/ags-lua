@@ -11,6 +11,7 @@ env.home = os.getenv("HOME")
 local scanlist = u.make_dict({
   '~/dots',
   '~/dots/personal',
+  '~/dots/zsh',
   '~/repos/ags',
   '~/repos/books'
 })
@@ -37,9 +38,8 @@ end
 
 local main = function ()
   for _, r in ipairs(repos) do
-    local remote = c.cyan(r.remote)
-    local branch = c.gray(r.branch)
-    print('\n'..remote..c.gray(' [')..branch..c.gray(']'))
+    local name = c.green(r.name)
+    print('\n'..c.gray('[')..name..c.gray('/'..r.branch..']'))
     table.print(r.commits)
     table.print(r.status)
   end

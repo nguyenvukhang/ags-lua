@@ -2,15 +2,10 @@ local git = require('git')
 local Repo = {}
 Repo.mt = {}
 
-function Repo.new (dir)   -- 2nd version
-  local repo = {}
-  setmetatable(repo, Repo.mt)
-  repo.branch = git.branch(dir)
-  repo.remote = git.remote(dir)
-  repo.commits = git.commits(dir)
-  repo.status = git.status(dir)
-  repo.dir = dir
+function Repo.new (dir)
+  local repo = git.summary(dir)
   if repo.commits or repo.status then
+    setmetatable(repo, Repo.mt)
     return repo
   else
     return nil
