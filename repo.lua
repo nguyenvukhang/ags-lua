@@ -10,7 +10,11 @@ function Repo.new (dir)   -- 2nd version
   repo.commits = git.commits(dir)
   repo.status = git.status(dir)
   repo.dir = dir
-  return repo
+  if repo.commits or repo.status then
+    return repo
+  else
+    return nil
+  end
 end
 
 function Repo.tostring (set)

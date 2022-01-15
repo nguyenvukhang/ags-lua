@@ -29,12 +29,14 @@ end
 
 local repos = {}
 for _, dir in pairs(git_repos) do
-  repos[dir] = Repo.new(dir)
+  local res = Repo.new(dir)
+  if res then
+    table.insert(repos, res)
+  end
 end
 
 local main = function ()
-  for _, dir in pairs(git_repos) do
-    local r = repos[dir]
+  for _, r in ipairs(repos) do
     local remote = c.cyan(r.remote)
     local branch = c.gray(r.branch)
     print('\n'..remote..c.gray(' [')..branch..c.gray(']'))
