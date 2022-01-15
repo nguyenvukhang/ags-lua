@@ -1,11 +1,10 @@
 #!/usr/bin/env lua
 
 local u = require('utils')
-local git = require('git')
 local Repo = require('repo')
 
 local delim = function ()
-  print('==========================') 
+  print('==========================')
 end
 
 function os.capture(cmd, raw)
@@ -88,7 +87,7 @@ table.sort(not_repos)
 --       print(v)
 --     end
 --   end
--- 
+--
 --   local git_commits = git.commits(dir)
 --   if git_commits then
 --     for _, v in pairs(git_commits) do

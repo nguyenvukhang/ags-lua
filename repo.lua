@@ -1,11 +1,12 @@
+local git = require('git')
 local Repo = {}
 Repo.mt = {}
 
 function Repo.new (dir)   -- 2nd version
   local repo = {}
   setmetatable(repo, Repo.mt)
-  repo.branch = "hello"
-  repo.remote = "world"
+  repo.branch = git.branch(dir)
+  repo.remote = git.remote(dir)
   repo.dir = dir
   return repo
 end
