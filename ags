@@ -1,5 +1,9 @@
 #!/usr/bin/env lua
 
+local parse_arguments = function (arg)
+  print(arg[1])
+end
+
 require('extensions')
 local u = require('utils')
 local Repo = require('repo')
@@ -46,4 +50,5 @@ local main = function ()
   print()
 end
 
+-- parse_arguments(arg)
 main()

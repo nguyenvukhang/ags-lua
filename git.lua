@@ -22,7 +22,19 @@ local cmd_get_string = function (cmd)
 end
 
 git.status = function (dir)
-  return cmd_get_table("git -C "..dir.." status -s")
+  local t = cmd_get_table("git -C "..dir.." status --short")
+  if t == nil then return nil end
+  local r = {}
+  for _, i in pairs(t) do
+    local _, _, tag = string.find(i, "^(..)")
+    if string.sub(tag, 0, 1) == " " then
+      i = c.red(i)
+    else
+      i = c.green(i)
+    end
+    table.insert(r, i)
+  end
+  return r
 end
 
 git.cherry = function (dir)
@@ -30,9 +42,9 @@ git.cherry = function (dir)
   if t == nil then return nil end
   local r = {}
   for _, i in pairs(t) do
-    local _, _, b, id, msg = string.find(i, "^(%p) (%w+) (.*)$")
+    local _, _, _, id, msg = string.find(i, "^(%p) (%w+) (.*)$")
     id = c.yellow(id)
-    table.insert(r, b..' '..id..' '..msg)
+    table.insert(r, id..' '..msg)
   end
   return r
 end
