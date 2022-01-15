@@ -9,24 +9,19 @@ env.home = os.getenv("HOME")
 
 local parse_commands = function (arg)
   local a = u.make_dict(arg)
-  local commands = {
+  return {
     list   = a["list"]   or a["ls"],
     rescan = a["rescan"] or a["re"]
   }
-  print('commands:')
-  for k, v in pairs(commands) do
-    print(k, v)
-  end
-  return commands
 end
-
 
 local scanlist = {
   '~/dots',
   '~/dots/personal',
   '~/dots/zsh',
   '~/repos/ags',
-  '~/repos/books'
+  '~/repos/dummy',
+  '~/repos/books',
 }
 
 local git_repos = {}
@@ -60,5 +55,12 @@ local main = function ()
   print()
 end
 
-parse_commands(arg)
+local commands = parse_commands(arg)
+-- for k, v in pairs(commands) do
+--   print(k, v)
+-- end
+
+if commands.list then
+  require('list').main(scanlist)
+end
 -- main()

@@ -1,7 +1,6 @@
 parse arguments
 
 functionalities
-[flag] print current scanlist
 [flag] scan for new repos
 
 flair
