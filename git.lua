@@ -1,4 +1,5 @@
 local u = require('utils')
+local c = require('colors')
 
 local git = {}
 
@@ -25,7 +26,15 @@ git.status = function (dir)
 end
 
 git.commits = function (dir)
-  return cmd_get_table("git -C "..dir.." cherry -v --abbrev")
+  local t =  cmd_get_table("git -C "..dir.." cherry -v --abbrev")
+  if t == nil then return nil end
+  local r = {}
+  for _, i in pairs(t) do
+    local _, _, b, id, msg = string.find(i, "^(%p) (%w+) (.*)$")
+    id = c.yellow(id)
+    table.insert(r, b..' '..id..' '..msg)
+  end
+  return r
 end
 
 git.branch = function (dir)

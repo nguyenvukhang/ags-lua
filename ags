@@ -11,7 +11,8 @@ env.home = os.getenv("HOME")
 local scanlist = u.make_dict({
   '~/dots',
   '~/dots/personal',
-  '~/repos/ags'
+  '~/repos/ags',
+  '~/repos/books'
 })
 
 local git_repos = {}
@@ -34,7 +35,7 @@ end
 local main = function ()
   for _, dir in pairs(git_repos) do
     local r = repos[dir]
-    local remote = c.green(r.remote)
+    local remote = c.cyan(r.remote)
     local branch = c.gray(r.branch)
     print('\n'..remote..c.gray(' [')..branch..c.gray(']'))
     table.print(r.commits)
