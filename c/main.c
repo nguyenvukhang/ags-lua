@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 int main() {
   char scanlist[][100] = {
@@ -18,6 +19,14 @@ int main() {
     "~/sunnus/app/dev",
     "~/sunnus/web/dev",
   };
+
+  char *HOME = getenv("HOME");
+  printf("%s\n", HOME);
+
+  /* check if a file exists
+   * https://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c
+   */
+
 
   /* 
    * print a particular index
