@@ -13,6 +13,17 @@ utils.exists = function (file)
   return ok
 end
 
+-- get all lines from a file, returns an empty
+-- list/table if the file does not exist
+utils.lines_from = function (file)
+  if not utils.exists(file) then return {} end
+  local lines = {}
+  for line in io.lines(file) do
+    lines[#lines + 1] = line
+  end
+  return lines
+end
+
 utils.split = function (inputstr, sep)
   if sep == nil then sep = "%s" end
   local t = {}

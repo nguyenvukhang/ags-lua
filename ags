@@ -11,18 +11,26 @@ local parse_commands = function (arg)
   local a = u.make_dict(arg)
   return {
     list   = a["list"]   or a["ls"],
-    rescan = a["rescan"] or a["re"]
   }
 end
 
-local scanlist = {
-  '~/dots',
-  '~/dots/personal',
-  '~/dots/zsh',
-  '~/repos/ags',
-  '~/repos/dummy',
-  '~/repos/books',
-}
+local scanlist = u.lines_from(env.home..'/.config/ags/scanlist')
+
+-- local scanlist = {
+--   '~/dots',
+--   '~/dots/nvim/.config/nvim',
+--   '~/dots/pass/.password-store',
+--   '~/dots/personal',
+--   '~/dots/walls',
+--   '~/dots/zsh',
+--   '~/repos/blog',
+--   '~/repos/hcanoe-firebase/repo',
+--   '~/repos/min',
+--   '~/repos/notes',
+--   '~/repos/uni',
+--   '~/sunnus/app/dev',
+--   '~/sunnus/web/dev',
+-- }
 
 local git_repos = {}
 local not_repos = {}
@@ -56,11 +64,9 @@ local main = function ()
 end
 
 local commands = parse_commands(arg)
--- for k, v in pairs(commands) do
---   print(k, v)
--- end
 
 if commands.list then
   require('list').main(scanlist)
+else
+  main()
 end
--- main()
