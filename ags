@@ -16,22 +16,6 @@ end
 
 local scanlist = u.lines_from(env.home..'/.config/ags/scanlist')
 
--- local scanlist = {
---   '~/dots',
---   '~/dots/nvim/.config/nvim',
---   '~/dots/pass/.password-store',
---   '~/dots/personal',
---   '~/dots/walls',
---   '~/dots/zsh',
---   '~/repos/blog',
---   '~/repos/hcanoe-firebase/repo',
---   '~/repos/min',
---   '~/repos/notes',
---   '~/repos/uni',
---   '~/sunnus/app/dev',
---   '~/sunnus/web/dev',
--- }
-
 local git_repos = {}
 local not_repos = {}
 for _, k in pairs(scanlist) do
