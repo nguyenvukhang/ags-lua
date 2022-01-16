@@ -1,0 +1,8 @@
+#!/bin/sh
+
+luac -o tmp main.lua
+echo "#!/usr/bin/env lua" > ags
+cat tmp >> ags
+chmod +x ags
+rm tmp
+cp ags ~/.local/bin
