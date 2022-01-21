@@ -205,7 +205,7 @@ end
 
 local main = function ()
   for _, r in pairs(repos) do
-    local name = colors.green(r.name)
+    local name = r.name
     print('\n'..colors.gray('[')..name..colors.gray('/'..r.branch..']'))
     table.print(r.commits)
     table.print(r.status)

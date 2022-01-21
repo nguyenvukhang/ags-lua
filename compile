@@ -5,4 +5,4 @@ echo "#!/usr/bin/env lua" > ags
 cat tmp >> ags
 chmod +x ags
 rm tmp
-cp ags ~/.local/bin
+cp ags ~/dots/personal/.local/bin
