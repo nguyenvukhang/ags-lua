@@ -92,7 +92,8 @@ git.status = function (dir)
   local r = {}
   for _, i in pairs(t) do
     local _, _, tag = string.find(i, "^(..)")
-    if string.sub(tag, 0, 1) == " " then
+    local first_char = string.sub(tag, 0, 1)
+    if first_char == " " or first_char == "?" then
       i = colors.red(i)
     else
       i = colors.green(i)
