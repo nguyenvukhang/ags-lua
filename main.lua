@@ -205,6 +205,10 @@ local list = function (sl)
 end
 
 local main = function ()
+  if next(repos) == nil then
+    print('\n'..colors.green("all clear!")..'\n')
+    return
+  end
   for _, r in pairs(repos) do
     local name = r.name
     print('\n'..colors.gray('[')..name..colors.gray('/'..r.branch..']'))
